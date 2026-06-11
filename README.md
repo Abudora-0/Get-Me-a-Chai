@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Get Me A Chai — Patreon Clone
+
+**Live Demo:** https://patreon-c.netlify.app
+
+A full-stack creator support platform inspired by Patreon and Buy Me a Coffee. Fans can support their favorite creators by sending payments directly via Razorpay.
+
+---
+
+## About
+
+Get Me A Chai lets creators sign up with GitHub, set up a public profile page, and start receiving support from their fans. Supporters visit the creator's page and make a payment (buying them a "chai") with a custom message. Built with Next.js, NextAuth for GitHub OAuth, Prisma for database access, and Razorpay for payment processing.
+
+---
+
+## Features
+
+- **GitHub OAuth login** — sign in instantly with your GitHub account via NextAuth
+- **Creator profile** — set your name, username, profile picture, cover photo, and Razorpay credentials
+- **Public support page** — shareable page where fans can send payments with a message
+- **Razorpay integration** — real payment processing via Razorpay API
+- **Dashboard** — manage your profile and view incoming payments
+- **Persistent storage** — all users and payments saved to PostgreSQL via Prisma
+
+---
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Next.js 16 | Full-stack React framework |
+| NextAuth v5 | GitHub OAuth authentication |
+| Prisma | ORM for database access |
+| PostgreSQL (Neon) | Cloud database |
+| Razorpay | Payment processing |
+| Tailwind CSS | Styling |
+
+---
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install --legacy-peer-deps
+
+# Set up environment variables
+cp .env.example .env
+
+# Push schema to database
+npx prisma migrate dev
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+DATABASE_URL=your_postgresql_connection_string
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret
+GITHUB_ID=your_github_oauth_app_id
+GITHUB_SECRET=your_github_oauth_app_secret
+NEXT_PUBLIC_URL=http://localhost:3000
+```
