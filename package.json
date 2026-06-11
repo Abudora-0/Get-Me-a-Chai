@@ -4,21 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.15.11",
     "@prisma/client": "^5.22.0",
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.3",
     "mysql2": "^3.22.5",
-    "next": "15.0.3",
+    "next": "^16.2.9",
     "next-auth": "^5.0.0-beta.25",
     "prisma": "^5.22.0",
     "razorpay": "^2.9.5",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "react-toastify": "^10.0.6"
   },
   "devDependencies": {
