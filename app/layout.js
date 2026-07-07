@@ -1,13 +1,18 @@
-import localFont from "next/font/local";
+import { Instrument_Serif, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import SessionWrapper from "@/components/SessionWrapper";
 import Footer from "@/components/Footer";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const instrument = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
 });
 
 export const metadata = {
@@ -21,7 +26,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} font-sans bg-[#fff5f7] text-slate-800 min-h-screen flex flex-col`} suppressHydrationWarning>
+      <body
+        className={`${instrument.variable} ${dmSans.variable} min-h-screen flex flex-col`}
+        style={{ fontFamily: "var(--font-body), sans-serif" }}
+        suppressHydrationWarning
+      >
         <SessionWrapper>
           <Navbar />
           <main className="flex-1">
