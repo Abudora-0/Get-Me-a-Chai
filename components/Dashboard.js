@@ -13,8 +13,9 @@ const fields = [
   { name: 'username',       label: 'Username',            type: 'text',     placeholder: 'your-username' },
   { name: 'profilepic',     label: 'Profile Picture URL', type: 'url',      placeholder: 'https://example.com/photo.jpg' },
   { name: 'coverpic',       label: 'Cover Picture URL',   type: 'url',      placeholder: 'https://example.com/cover.jpg' },
-  { name: 'razorpayid',     label: 'Razorpay Key ID',     type: 'text',     placeholder: 'rzp_live_...' },
-  { name: 'razorpaysecret', label: 'Razorpay Key Secret', type: 'password', placeholder: '••••••••••••••••' },
+  { name: 'jazzcashMerchantId', label: 'JazzCash Merchant ID',    type: 'text',     placeholder: 'MC12345' },
+  { name: 'jazzcashPassword',   label: 'JazzCash Password',       type: 'password', placeholder: '••••••••••••••••' },
+  { name: 'jazzcashSalt',       label: 'JazzCash Integrity Salt', type: 'password', placeholder: '••••••••••••••••' },
 ]
 
 const Dashboard = () => {
@@ -114,8 +115,8 @@ const Dashboard = () => {
               <div className="deco-card p-6 text-center">
                 <p className="deco-label mb-2">Your Page</p>
                 <p className="font-deco text-2xl text-[#123c33] mt-1 truncate">/{form.username || '—'}</p>
-                <p className="text-xs mt-1.5" style={{ color: form.razorpayid ? '#3d7a4f' : '#7a2e2e' }}>
-                  {form.razorpayid ? '✓ Payments active' : '⚠ Set Razorpay key'}
+                <p className="text-xs mt-1.5" style={{ color: form.jazzcashMerchantId ? '#3d7a4f' : '#7a2e2e' }}>
+                  {form.jazzcashMerchantId ? '✓ Payments active' : '⚠ Set JazzCash details'}
                 </p>
               </div>
             </div>
@@ -164,8 +165,9 @@ const Dashboard = () => {
                   { label: 'Display Name', done: !!form.name },
                   { label: 'Profile Picture', done: !!form.profilepic },
                   { label: 'Cover Picture', done: !!form.coverpic },
-                  { label: 'Razorpay Key ID', done: !!form.razorpayid },
-                  { label: 'Razorpay Key Secret', done: !!form.razorpaysecret },
+                  { label: 'JazzCash Merchant ID', done: !!form.jazzcashMerchantId },
+                  { label: 'JazzCash Password', done: !!form.jazzcashPassword },
+                  { label: 'JazzCash Integrity Salt', done: !!form.jazzcashSalt },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-3 text-sm">
                     <span className={`w-5 h-5 flex items-center justify-center text-xs border ${item.done ? 'border-[#3d7a4f] text-[#3d7a4f]' : 'border-[#a8841c]/30 text-[#8fa199]'}`}>
@@ -261,7 +263,7 @@ const Dashboard = () => {
                       className="deco-input"
                       autoComplete="off"
                     />
-                    {(f.name === 'razorpayid' || f.name === 'razorpaysecret') && (
+                    {f.name.startsWith('jazzcash') && (
                       <p className="text-xs text-[#8fa199] mt-1.5">Required to accept payments on your page</p>
                     )}
                   </div>

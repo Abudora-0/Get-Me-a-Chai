@@ -23,12 +23,12 @@ const benefits = [
   {
     numeral: "IV",
     title: "Instant Setup",
-    desc: "Sign in with GitHub, add your Razorpay credentials, and you're live in minutes.",
+    desc: "Sign in with GitHub or Google, add your JazzCash details, and you're live in minutes.",
   },
   {
     numeral: "V",
     title: "Secure Payments",
-    desc: "Powered by Razorpay — India's most trusted payment gateway.",
+    desc: "Powered by JazzCash — Pakistan's most widely used payment service.",
   },
   {
     numeral: "VI",
@@ -62,8 +62,8 @@ const About = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
           {[
-            { step: "1", title: "Sign In", desc: "Create your account instantly with GitHub. No long forms, no waiting." },
-            { step: "2", title: "Set Up Your Page", desc: "Add a profile photo, cover image, and connect your Razorpay account to receive payments." },
+            { step: "1", title: "Sign In", desc: "Create your account instantly with GitHub or Google. No long forms, no waiting." },
+            { step: "2", title: "Set Up Your Page", desc: "Add a profile photo, cover image, and connect your JazzCash merchant account to receive payments." },
             { step: "3", title: "Share & Earn", desc: "Share your unique page link. Fans visit and buy you a chai — money lands in your account." },
           ].map(s => (
             <div key={s.step} className="deco-card deco-card-hover p-8 text-center">

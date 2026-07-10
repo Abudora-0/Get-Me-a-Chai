@@ -21,7 +21,7 @@ const features = [
 const steps = [
   { step: "01", title: "Create Your Page", desc: "Sign in with GitHub and set up your creator profile in minutes." },
   { step: "02", title: "Share Your Link", desc: "Share your unique page URL with your audience and community." },
-  { step: "03", title: "Receive Support", desc: "Your fans buy you a chai — funds go directly to you via Razorpay." },
+  { step: "03", title: "Receive Support", desc: "Your fans buy you a chai — funds go directly to you via JazzCash." },
 ]
 
 const Sunburst = () => (

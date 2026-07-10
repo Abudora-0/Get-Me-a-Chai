@@ -1,11 +1,27 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import Script from 'next/script'
 import { fetchuser, fetchpayments, initiate } from '@/actions/useractions'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
+// Build a hidden form with the signed JazzCash fields and submit it,
+// redirecting the supporter to the JazzCash hosted checkout page.
+const redirectToJazzCash = ({ endpoint, fields }) => {
+  const form = document.createElement('form')
+  form.method = 'POST'
+  form.action = endpoint
+  for (const [name, value] of Object.entries(fields)) {
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = name
+    input.value = value ?? ''
+    form.appendChild(input)
+  }
+  document.body.appendChild(form)
+  form.submit()
+}
 
 const PaymentPage = ({ username }) => {
   const [paymentform, setPaymentform] = useState({ name: '', message: '', amount: '' })
@@ -25,6 +41,10 @@ const PaymentPage = ({ username }) => {
       toast.success('Thanks for your donation! 🎉', { position: 'top-right' })
       router.replace(`/${username}`)
     }
+    if (searchParams.get("paymentfailed") === "true") {
+      toast.error('Payment was not completed. Please try again.', { position: 'top-right' })
+      router.replace(`/${username}`)
+    }
   }, [searchParams])
 
   const getData = async () => {
@@ -37,28 +57,17 @@ const PaymentPage = ({ username }) => {
   const handleChange = (e) => setPaymentform({ ...paymentform, [e.target.name]: e.target.value })
 
   const pay = async (amount) => {
-    if (!currentuser.razorpayid) {
+    if (!currentuser.jazzcashMerchantId) {
       toast.error('This creator has not set up payments yet.')
       return
     }
     setPaying(true)
     try {
-      const order = await initiate(amount, username, paymentform)
-      const options = {
-        key: currentuser.razorpayid,
-        amount,
-        currency: "PKR",
-        name: "Get Me a Chai",
-        description: `Supporting ${username}`,
-        order_id: order.id,
-        callback_url: `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
-        theme: { color: "#123c33" },
-      }
-      const rzp = new window.Razorpay(options)
-      rzp.open()
+      const checkout = await initiate(amount, username, paymentform)
+      redirectToJazzCash(checkout)
+      // no setPaying(false) on success — the page navigates away
     } catch {
       toast.error('Payment failed. Please try again.')
-    } finally {
       setPaying(false)
     }
   }
@@ -69,7 +78,6 @@ const PaymentPage = ({ username }) => {
   return (
     <>
       <ToastContainer position="top-right" autoClose={5000} theme="light" />
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
       {/* Cover + Profile */}
       <div className="relative">
@@ -206,8 +214,11 @@ const PaymentPage = ({ username }) => {
               disabled={!isFormValid || paying}
               className="btn-deco-gold w-full !py-4"
             >
-              {paying ? 'Pouring…' : `Pay Rs.${paymentform.amount || '0'}`}
+              {paying ? 'Redirecting to JazzCash…' : `Pay Rs.${paymentform.amount || '0'} with JazzCash`}
             </button>
+            <p className="text-center text-[#8fa199] text-[0.65rem] uppercase tracking-[0.18em]">
+              Secure checkout via JazzCash — wallet or card
+            </p>
           </div>
         </div>
       </div>
