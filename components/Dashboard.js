@@ -40,9 +40,9 @@ const Dashboard = () => {
     setSaving(true)
     try {
       await updateProfile(formData, session.user.name)
-      toast.success('Profile updated!', { theme: 'dark', position: 'top-right' })
+      toast.success('Profile updated!', { position: 'top-right' })
     } catch {
-      toast.error('Something went wrong.', { theme: 'dark', position: 'top-right' })
+      toast.error('Something went wrong.', { position: 'top-right' })
     } finally {
       setSaving(false)
     }
@@ -53,21 +53,22 @@ const Dashboard = () => {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={4000} theme="dark" />
+      <ToastContainer position="top-right" autoClose={4000} theme="light" />
 
-      <div className="max-w-4xl mx-auto px-4 py-10">
+      <div className="max-w-4xl mx-auto px-4 py-12">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+        <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
           <div>
-            <h1 className="font-chai text-4xl text-[#f3e9dd]">Dashboard</h1>
-            <p className="text-[#b39c88] mt-1">Welcome back, <span className="text-[#f5a623] font-semibold">{form.name || form.username || '...'}</span></p>
+            <div className="deco-label mb-2">— The Proprietor&apos;s Office —</div>
+            <h1 className="font-deco text-4xl md:text-5xl text-[#123c33]">Dashboard</h1>
+            <p className="text-[#4a6b60] mt-2">Welcome back, <span className="text-[#a8841c] font-semibold">{form.name || form.username || '...'}</span></p>
           </div>
           <a
             href={`/${form.username || ''}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-chai flex items-center gap-2 px-4 py-2 text-sm !rounded-xl"
+            className="btn-deco flex items-center gap-2 !px-5 !py-2.5 !text-[0.68rem]"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -77,15 +78,17 @@ const Dashboard = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 chai-card !rounded-xl p-1 w-fit mb-8">
-          {['overview', 'supporters', 'settings'].map(t => (
+        <div className="flex border border-[#a8841c]/35 w-fit mb-10 bg-[#fffdf6]">
+          {['overview', 'supporters', 'settings'].map((t, i) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${
+              className={`px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-all capitalize ${
+                i > 0 ? 'border-l border-[#a8841c]/35' : ''
+              } ${
                 tab === t
-                  ? 'bg-[#f5a623] text-[#201512]'
-                  : 'text-[#b39c88] hover:text-[#f3e9dd]'
+                  ? 'bg-[#123c33] text-[#c9a227]'
+                  : 'text-[#4a6b60] hover:text-[#123c33]'
               }`}
             >
               {t}
@@ -95,58 +98,58 @@ const Dashboard = () => {
 
         {/* OVERVIEW TAB */}
         {tab === 'overview' && (
-          <div className="space-y-6">
+          <div className="space-y-7">
             {/* Stat cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="chai-card p-6">
-                <p className="text-sm text-[#b39c88] mb-1">Total Earned</p>
-                <p className="font-chai text-4xl text-[#f3e9dd]">Rs.{totalEarned.toLocaleString()}</p>
-                <p className="text-xs text-[#f5a623] mt-1">from {payments.length} payments</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="deco-card p-6 text-center">
+                <p className="deco-label mb-2">Total Earned</p>
+                <p className="font-deco text-4xl text-[#123c33]">Rs.{totalEarned.toLocaleString()}</p>
+                <p className="text-xs text-[#a8841c] mt-1.5">from {payments.length} payments</p>
               </div>
-              <div className="chai-card p-6">
-                <p className="text-sm text-[#b39c88] mb-1">Supporters</p>
-                <p className="font-chai text-4xl text-[#f3e9dd]">{totalSupporters}</p>
-                <p className="text-xs text-[#f5a623] mt-1">unique people</p>
+              <div className="deco-card p-6 text-center">
+                <p className="deco-label mb-2">Supporters</p>
+                <p className="font-deco text-4xl text-[#123c33]">{totalSupporters}</p>
+                <p className="text-xs text-[#a8841c] mt-1.5">unique people</p>
               </div>
-              <div className="chai-card p-6">
-                <p className="text-sm text-[#b39c88] mb-1">Your Page</p>
-                <p className="text-sm font-semibold text-[#f3e9dd] mt-2 truncate">/{form.username || '—'}</p>
-                <p className="text-xs mt-1" style={{ color: form.razorpayid ? '#8faa5e' : '#c96f4a' }}>
+              <div className="deco-card p-6 text-center">
+                <p className="deco-label mb-2">Your Page</p>
+                <p className="font-deco text-2xl text-[#123c33] mt-1 truncate">/{form.username || '—'}</p>
+                <p className="text-xs mt-1.5" style={{ color: form.razorpayid ? '#3d7a4f' : '#7a2e2e' }}>
                   {form.razorpayid ? '✓ Payments active' : '⚠ Set Razorpay key'}
                 </p>
               </div>
             </div>
 
             {/* Recent supporters */}
-            <div className="chai-card p-6">
-              <h2 className="font-chai text-2xl text-[#f3e9dd] mb-4">Recent Supporters</h2>
+            <div className="deco-card p-7">
+              <h2 className="font-deco text-2xl text-[#123c33] mb-5">Recent Supporters</h2>
               {payments.length === 0 ? (
                 <div className="text-center py-8">
-                  <span className="text-4xl opacity-40">☕</span>
-                  <p className="text-[#7d6a5a] mt-3 text-sm">No supporters yet — share your page!</p>
+                  <span className="text-4xl opacity-50">☕</span>
+                  <p className="text-[#8fa199] mt-3 text-sm">No supporters yet — share your page!</p>
                   <a
                     href={`/${form.username || ''}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block mt-3 text-[#f5a623] text-sm font-semibold hover:underline underline-offset-4"
+                    className="inline-block mt-3 text-[#a8841c] text-sm font-semibold hover:underline underline-offset-4"
                   >
                     getmeachai.com/{form.username || '...'}
                   </a>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-1">
                   {payments.map((p, i) => (
-                    <div key={p.id || i} className="flex items-center justify-between py-3 border-b border-[#f5a623]/8 last:border-0">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-[#f5a623]/15 border border-[#f5a623]/30 flex items-center justify-center text-[#f5a623] font-bold text-sm">
-                          {p.name?.[0]?.toUpperCase() || '?'}
+                    <div key={p.id || i} className="flex items-center justify-between py-3.5 border-b border-[#a8841c]/15 last:border-0">
+                      <div className="flex items-center gap-4">
+                        <div className="w-9 h-9 rotate-45 border border-[#c9a227] flex items-center justify-center">
+                          <span className="-rotate-45 font-deco text-[#a8841c] text-sm">{p.name?.[0]?.toUpperCase() || '?'}</span>
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-[#f3e9dd]">{p.name}</p>
-                          {p.message && <p className="text-xs text-[#b39c88] truncate max-w-xs italic">{p.message}</p>}
+                          <p className="text-sm font-medium text-[#123c33]">{p.name}</p>
+                          {p.message && <p className="text-xs text-[#4a6b60] truncate max-w-xs italic">{p.message}</p>}
                         </div>
                       </div>
-                      <span className="text-sm font-bold text-[#f5a623]">Rs.{p.amount}</span>
+                      <span className="font-deco text-lg text-[#a8841c]">Rs.{p.amount}</span>
                     </div>
                   ))}
                 </div>
@@ -154,9 +157,9 @@ const Dashboard = () => {
             </div>
 
             {/* Profile completeness */}
-            <div className="chai-card p-6">
-              <h2 className="font-chai text-2xl text-[#f3e9dd] mb-4">Profile Completeness</h2>
-              <div className="space-y-2">
+            <div className="deco-card p-7">
+              <h2 className="font-deco text-2xl text-[#123c33] mb-5">Profile Completeness</h2>
+              <div className="space-y-2.5">
                 {[
                   { label: 'Display Name', done: !!form.name },
                   { label: 'Profile Picture', done: !!form.profilepic },
@@ -165,16 +168,16 @@ const Dashboard = () => {
                   { label: 'Razorpay Key Secret', done: !!form.razorpaysecret },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-3 text-sm">
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${item.done ? 'bg-[#8faa5e]/20 text-[#8faa5e]' : 'bg-[#35251c] text-[#7d6a5a]'}`}>
-                      {item.done ? '✓' : '○'}
+                    <span className={`w-5 h-5 flex items-center justify-center text-xs border ${item.done ? 'border-[#3d7a4f] text-[#3d7a4f]' : 'border-[#a8841c]/30 text-[#8fa199]'}`}>
+                      {item.done ? '✓' : ''}
                     </span>
-                    <span className={item.done ? 'text-[#f3e9dd]' : 'text-[#7d6a5a]'}>{item.label}</span>
+                    <span className={item.done ? 'text-[#123c33]' : 'text-[#8fa199]'}>{item.label}</span>
                   </div>
                 ))}
               </div>
               <button
                 onClick={() => setTab('settings')}
-                className="mt-4 text-sm text-[#f5a623] font-semibold hover:underline underline-offset-4"
+                className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[#a8841c] hover:underline underline-offset-4"
               >
                 Complete your profile →
               </button>
@@ -184,31 +187,31 @@ const Dashboard = () => {
 
         {/* SUPPORTERS TAB */}
         {tab === 'supporters' && (
-          <div className="chai-card p-6">
-            <h2 className="font-chai text-2xl text-[#f3e9dd] mb-6">All Supporters</h2>
+          <div className="deco-card p-7">
+            <h2 className="font-deco text-2xl text-[#123c33] mb-6">All Supporters</h2>
             {payments.length === 0 ? (
               <div className="text-center py-12">
-                <span className="text-5xl opacity-40">☕</span>
-                <p className="text-[#b39c88] mt-4">No supporters yet.</p>
-                <p className="text-[#7d6a5a] text-sm mt-1">Share your page to start receiving chai!</p>
+                <span className="text-5xl opacity-50">☕</span>
+                <p className="text-[#4a6b60] mt-4">No supporters yet.</p>
+                <p className="text-[#8fa199] text-sm mt-1">Share your page to start receiving chai!</p>
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {payments.map((p, i) => (
-                  <div key={p.id || i} className="flex items-center justify-between p-4 rounded-xl bg-[#191009] border border-[#f5a623]/8 hover:border-[#f5a623]/25 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#f5a623] flex items-center justify-center text-[#201512] font-bold">
-                        {p.name?.[0]?.toUpperCase() || '?'}
+                  <div key={p.id || i} className="flex items-center justify-between p-5 border border-[#a8841c]/20 hover:border-[#c9a227]/60 transition-colors bg-[#f7f3e8]/60">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rotate-45 bg-[#123c33] border border-[#c9a227] flex items-center justify-center">
+                        <span className="-rotate-45 font-deco text-[#c9a227]">{p.name?.[0]?.toUpperCase() || '?'}</span>
                       </div>
                       <div>
-                        <p className="font-medium text-[#f3e9dd]">{p.name}</p>
-                        {p.message && <p className="text-sm text-[#b39c88] mt-0.5 italic">&quot;{p.message}&quot;</p>}
-                        <p className="text-xs text-[#7d6a5a] mt-0.5">{new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                        <p className="font-medium text-[#123c33]">{p.name}</p>
+                        {p.message && <p className="text-sm text-[#4a6b60] mt-0.5 italic">&quot;{p.message}&quot;</p>}
+                        <p className="text-xs text-[#8fa199] mt-0.5">{new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="font-chai text-2xl text-[#f5a623]">Rs.{p.amount}</span>
-                      <p className="text-xs text-[#7d6a5a]">chai</p>
+                      <span className="font-deco text-2xl text-[#a8841c]">Rs.{p.amount}</span>
+                      <p className="deco-label !text-[0.5rem]">chai</p>
                     </div>
                   </div>
                 ))}
@@ -219,33 +222,33 @@ const Dashboard = () => {
 
         {/* SETTINGS TAB */}
         {tab === 'settings' && (
-          <div className="space-y-6">
+          <div className="space-y-7">
             {/* Profile preview */}
             {(form.profilepic || form.coverpic) && (
-              <div className="chai-card overflow-hidden">
+              <div className="deco-card overflow-hidden !p-0">
                 {form.coverpic && (
-                  <div className="h-28 bg-[#35251c] overflow-hidden">
+                  <div className="h-28 bg-[#123c33] overflow-hidden">
                     <img src={form.coverpic} alt="Cover" className="w-full h-full object-cover" />
                   </div>
                 )}
-                <div className="px-5 pb-4 pt-2 flex items-center gap-3">
+                <div className="px-6 pb-5 pt-3 flex items-center gap-4">
                   {form.profilepic && (
-                    <img src={form.profilepic} alt="Profile" className="w-12 h-12 rounded-full border-2 border-[#f5a623] shadow -mt-6 object-cover" />
+                    <img src={form.profilepic} alt="Profile" className="w-12 h-12 rounded-full border-2 border-[#c9a227] shadow -mt-6 object-cover" />
                   )}
                   <div>
-                    <p className="font-semibold text-[#f3e9dd]">{form.name || form.username || 'Your Name'}</p>
-                    <p className="text-xs text-[#7d6a5a]">@{form.username || 'username'}</p>
+                    <p className="font-deco text-lg text-[#123c33]">{form.name || form.username || 'Your Name'}</p>
+                    <p className="text-xs text-[#8fa199]">@{form.username || 'username'}</p>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="chai-card p-7">
-              <h2 className="font-chai text-2xl text-[#f3e9dd] mb-6">Profile Settings</h2>
-              <form action={handleSubmit} className="flex flex-col gap-5">
+            <div className="deco-card p-8">
+              <h2 className="font-deco text-2xl text-[#123c33] mb-7">Profile Settings</h2>
+              <form action={handleSubmit} className="flex flex-col gap-6">
                 {fields.map(f => (
                   <div key={f.name}>
-                    <label htmlFor={f.name} className="block text-sm font-medium text-[#b39c88] mb-1.5">
+                    <label htmlFor={f.name} className="deco-label block mb-1">
                       {f.label}
                     </label>
                     <input
@@ -255,11 +258,11 @@ const Dashboard = () => {
                       value={form[f.name] || ''}
                       onChange={handleChange}
                       placeholder={f.placeholder}
-                      className="chai-input"
+                      className="deco-input"
                       autoComplete="off"
                     />
                     {(f.name === 'razorpayid' || f.name === 'razorpaysecret') && (
-                      <p className="text-xs text-[#7d6a5a] mt-1">Required to accept payments on your page</p>
+                      <p className="text-xs text-[#8fa199] mt-1.5">Required to accept payments on your page</p>
                     )}
                   </div>
                 ))}
@@ -267,9 +270,9 @@ const Dashboard = () => {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="btn-chai w-full py-3 !rounded-xl"
+                    className="btn-deco-gold w-full !py-3.5"
                   >
-                    {saving ? 'Saving...' : 'Save Changes'}
+                    {saving ? 'Saving…' : 'Save Changes'}
                   </button>
                 </div>
               </form>

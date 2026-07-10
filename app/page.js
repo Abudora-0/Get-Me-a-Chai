@@ -2,17 +2,17 @@ import Link from "next/link"
 
 const features = [
   {
-    emoji: "💰",
+    numeral: "I",
     title: "Fans Want to Contribute",
     desc: "Your fans are willing to support you financially so you can keep creating what you love.",
   },
   {
-    emoji: "🤝",
+    numeral: "II",
     title: "Fans Want to Help",
     desc: "Build a community of supporters who are invested in your success and growth.",
   },
   {
-    emoji: "🚀",
+    numeral: "III",
     title: "Fans Want to Collaborate",
     desc: "Connect with your audience on a deeper level and bring projects to life together.",
   },
@@ -24,14 +24,27 @@ const steps = [
   { step: "03", title: "Receive Support", desc: "Your fans buy you a chai — funds go directly to you via Razorpay." },
 ]
 
-const BigCup = () => (
-  <svg width="120" height="120" viewBox="0 0 64 64" fill="none" className="mx-auto">
-    <path className="steam-line" d="M24 22 Q25.5 18 24 14" stroke="#c96f4a" strokeWidth="2.4" strokeLinecap="round" fill="none"/>
-    <path className="steam-line" d="M32 22 Q33.5 18 32 14" stroke="#c96f4a" strokeWidth="2.4" strokeLinecap="round" fill="none"/>
-    <path className="steam-line" d="M40 22 Q41.5 18 40 14" stroke="#c96f4a" strokeWidth="2.4" strokeLinecap="round" fill="none"/>
-    <path d="M14 28h30l-3.2 20a2 2 0 01-2 1.7H19.2a2 2 0 01-2-1.7L14 28z" fill="#f5a623"/>
-    <path d="M44 32h4a4 4 0 010 8h-4.6" stroke="#f5a623" strokeWidth="2.6" strokeLinecap="round" fill="none"/>
-    <ellipse cx="29" cy="55" rx="16" ry="2" fill="#f5a623" fillOpacity="0.18"/>
+const Sunburst = () => (
+  <svg width="150" height="150" viewBox="0 0 100 100" fill="none" className="mx-auto">
+    {/* rotating rays */}
+    <g className="sunburst-slow" stroke="#c9a227" strokeWidth="1" opacity="0.55">
+      {Array.from({ length: 24 }).map((_, i) => {
+        const a = (i * 15 * Math.PI) / 180
+        return (
+          <line
+            key={i}
+            x1={50 + 30 * Math.cos(a)} y1={50 + 30 * Math.sin(a)}
+            x2={50 + 46 * Math.cos(a)} y2={50 + 46 * Math.sin(a)}
+          />
+        )
+      })}
+    </g>
+    <circle cx="50" cy="50" r="27" stroke="#c9a227" strokeWidth="1.2"/>
+    <circle cx="50" cy="50" r="24" stroke="#c9a227" strokeWidth="0.6" opacity="0.5"/>
+    {/* cup */}
+    <path d="M40 46h20l-2.3 13a1.6 1.6 0 01-1.6 1.3H43.9a1.6 1.6 0 01-1.6-1.3L40 46z" fill="#123c33"/>
+    <path d="M60 48.5h3a3 3 0 010 6h-3.7" stroke="#123c33" strokeWidth="1.8" fill="none"/>
+    <path d="M45.5 42.5c.8-1.6.8-2.6 0-4.2M50 42.5c.8-1.6.8-2.6 0-4.2M54.5 42.5c.8-1.6.8-2.6 0-4.2" stroke="#a8841c" strokeWidth="1.3" strokeLinecap="round"/>
   </svg>
 )
 
@@ -39,33 +52,24 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        {/* warm glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-[#f5a623]/8 rounded-full blur-3xl -z-10 pointer-events-none" />
-
-        <div className="max-w-4xl mx-auto px-4 pt-20 pb-24 flex flex-col items-center text-center gap-7 fade-in-up">
-          <BigCup />
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#f5a623]/25 bg-[#f5a623]/8 text-[#f5a623] text-xs font-semibold tracking-widest uppercase">
-            Crowdfunding for creators
-          </div>
-          <h1 className="font-chai text-5xl md:text-7xl text-[#f3e9dd] leading-[1.05] max-w-3xl">
-            Let your fans<br />
-            buy you a <em className="text-[#f5a623]">chai.</em>
+      <section className="relative overflow-hidden border-b border-[#a8841c]/35">
+        <div className="max-w-4xl mx-auto px-4 pt-16 pb-20 flex flex-col items-center text-center gap-7 fade-in-up">
+          <Sunburst />
+          <div className="deco-label">— Patronage for the modern creator —</div>
+          <h1 className="font-deco text-5xl md:text-7xl text-[#123c33] leading-[1.08] max-w-3xl">
+            Let Your Fans<br />
+            Buy You a <span className="text-[#a8841c]">Chai</span>
           </h1>
-          <p className="text-[#b39c88] text-lg max-w-xl leading-relaxed">
-            A cozy corner of the internet where your audience directly funds
-            your creative work — one warm cup at a time.
+          <p className="text-[#4a6b60] text-lg max-w-xl leading-relaxed">
+            A grand little corner of the internet where your audience funds your
+            creative work — served one golden cup at a time.
           </p>
-          <div className="flex gap-4 flex-wrap justify-center">
+          <div className="flex gap-4 flex-wrap justify-center mt-2">
             <Link href="/login">
-              <button className="btn-chai px-8 py-3.5 text-base">
-                Start brewing →
-              </button>
+              <button className="btn-deco-gold">Begin Here</button>
             </Link>
             <Link href="/about">
-              <button className="btn-chai-ghost px-8 py-3.5 text-base">
-                Learn more
-              </button>
+              <button className="btn-deco-outline">The Details</button>
             </Link>
           </div>
         </div>
@@ -73,31 +77,35 @@ export default function Home() {
 
       {/* Features */}
       <section className="max-w-6xl mx-auto px-4 py-20">
-        <h2 className="font-chai text-4xl text-center text-[#f3e9dd] mb-3">Your fans are ready</h2>
-        <p className="text-center text-[#7d6a5a] mb-12">Here&apos;s how your community can support your journey</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="text-center mb-12">
+          <div className="deco-label mb-3">The Patrons</div>
+          <h2 className="font-deco text-4xl text-[#123c33]">Your Fans Are Ready</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
           {features.map((f) => (
-            <div key={f.title} className="chai-card chai-card-hover p-7">
-              <div className="text-4xl mb-4">{f.emoji}</div>
-              <h3 className="font-chai text-2xl text-[#f3e9dd] mb-2">{f.title}</h3>
-              <p className="text-[#b39c88] text-sm leading-relaxed">{f.desc}</p>
+            <div key={f.title} className="deco-card deco-card-hover p-9 text-center">
+              <div className="font-deco text-3xl text-[#c9a227] mb-4">{f.numeral}</div>
+              <div className="deco-divider mb-5 text-[0.6rem]">◆</div>
+              <h3 className="font-deco text-2xl text-[#123c33] mb-3">{f.title}</h3>
+              <p className="text-[#4a6b60] text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="border-y border-[#f5a623]/10 bg-[#191009] py-20">
+      {/* How it works — emerald band */}
+      <section className="bg-[#123c33] border-y border-[#c9a227]/40 py-20">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="font-chai text-4xl text-center text-[#f3e9dd] mb-3">The recipe</h2>
-          <p className="text-center text-[#7d6a5a] mb-12">Get started in three simple steps</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center mb-12">
+            <div className="deco-label !text-[#c9a227] mb-3">The Ceremony</div>
+            <h2 className="font-deco text-4xl text-[#f7f3e8]">How It Works</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
             {steps.map((s) => (
-              <div key={s.step} className="chai-card p-7 relative overflow-hidden">
-                <div className="font-chai text-7xl text-[#f5a623]/12 absolute -top-2 right-4 select-none">{s.step}</div>
-                <div className="font-chai text-lg text-[#f5a623] mb-3">{s.step}</div>
-                <h3 className="font-chai text-2xl text-[#f3e9dd] mb-2">{s.title}</h3>
-                <p className="text-[#b39c88] text-sm leading-relaxed">{s.desc}</p>
+              <div key={s.step} className="border border-[#c9a227]/50 p-8 relative" style={{ boxShadow: 'inset 0 0 0 4px #123c33, inset 0 0 0 5px rgba(201,162,39,0.4)' }}>
+                <div className="font-deco text-5xl text-[#c9a227] mb-4">{s.step}</div>
+                <h3 className="font-deco text-2xl text-[#f7f3e8] mb-2">{s.title}</h3>
+                <p className="text-[#f7f3e8]/65 text-sm leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -106,9 +114,10 @@ export default function Home() {
 
       {/* Learn more */}
       <section className="max-w-6xl mx-auto px-4 py-20 flex flex-col items-center gap-6">
-        <h2 className="font-chai text-4xl text-[#f3e9dd]">See it in action</h2>
-        <p className="text-[#7d6a5a]">Watch this quick video to understand how Get Me a Chai works</p>
-        <div className="w-full max-w-2xl aspect-video rounded-2xl overflow-hidden border border-[#f5a623]/20 shadow-2xl shadow-black/40">
+        <div className="deco-label">A Brief Screening</div>
+        <h2 className="font-deco text-4xl text-[#123c33]">See It in Action</h2>
+        <p className="text-[#4a6b60]">Watch this quick video to understand how Get Me a Chai works</p>
+        <div className="w-full max-w-2xl aspect-video overflow-hidden deco-card !p-0">
           <iframe
             className="w-full h-full"
             src="https://www.youtube.com/embed/bp4_7T9J6Fg"
@@ -120,17 +129,15 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-6xl mx-auto px-4 pb-20">
-        <div className="chai-card !rounded-3xl p-12 flex flex-col items-center gap-5 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#f5a623]/6 to-transparent pointer-events-none" />
-          <span className="text-5xl">☕</span>
-          <h2 className="font-chai text-4xl text-[#f3e9dd]">Ready to get supported?</h2>
-          <p className="text-[#b39c88] max-w-md">Join thousands of creators already using Get Me a Chai to fund their passion projects.</p>
-          <Link href="/login">
-            <button className="btn-chai px-9 py-3.5 text-base">
-              Create your page — it&apos;s free
-            </button>
+      <section className="max-w-4xl mx-auto px-4 pb-20">
+        <div className="deco-card p-12 md:p-16 flex flex-col items-center gap-5 text-center">
+          <div className="deco-divider w-full max-w-xs text-xs">◆ ◆ ◆</div>
+          <h2 className="font-deco text-4xl md:text-5xl text-[#123c33]">Ready to Be Supported?</h2>
+          <p className="text-[#4a6b60] max-w-md">Join thousands of creators already using Get Me a Chai to fund their passion projects.</p>
+          <Link href="/login" className="mt-2">
+            <button className="btn-deco-gold">Create Your Page — It&apos;s Free</button>
           </Link>
+          <div className="deco-divider w-full max-w-xs text-xs">◆ ◆ ◆</div>
         </div>
       </section>
     </>

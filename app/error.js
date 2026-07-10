@@ -10,19 +10,18 @@ export default function Error({ error, reset }) {
 
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center gap-5">
-      <span className="text-6xl">☕</span>
-      <h1 className="font-chai text-4xl text-[#f3e9dd]">Something spilled</h1>
-      <p className="text-[#7d6a5a] max-w-sm">
+      <div className="deco-label">— A Spill in the Parlour —</div>
+      <h1 className="font-deco text-4xl text-[#123c33]">Something Went Wrong</h1>
+      <div className="deco-divider max-w-[200px] w-full text-xs">◆</div>
+      <p className="text-[#8fa199] max-w-sm">
         {error?.message || "An unexpected error occurred. Please try again."}
       </p>
-      <div className="flex gap-3">
-        <button onClick={reset} className="btn-chai px-7 py-2.5 text-sm">
+      <div className="flex gap-4 mt-2">
+        <button onClick={reset} className="btn-deco-gold">
           Try Again
         </button>
         <Link href="/">
-          <button className="btn-chai-ghost px-7 py-2.5 text-sm">
-            Go Home
-          </button>
+          <button className="btn-deco-outline">Go Home</button>
         </Link>
       </div>
     </div>

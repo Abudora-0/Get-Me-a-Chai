@@ -3,16 +3,15 @@ import Link from "next/link"
 export default function NotFound() {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center gap-5">
-      <span className="text-6xl">☕</span>
-      <h1 className="font-chai text-7xl text-[#f3e9dd]">4<em className="text-[#f5a623]">0</em>4</h1>
-      <p className="text-[#b39c88] text-lg">Oops — this cup is empty.</p>
-      <p className="text-[#7d6a5a] max-w-sm text-sm">
+      <div className="deco-label">— Table Not Found —</div>
+      <h1 className="font-deco text-8xl text-[#123c33]">4<span className="text-[#a8841c]">0</span>4</h1>
+      <div className="deco-divider max-w-[200px] w-full text-xs">◆</div>
+      <p className="text-[#4a6b60] text-lg">This page isn&apos;t on the menu.</p>
+      <p className="text-[#8fa199] max-w-sm text-sm">
         The creator page you&apos;re looking for may have moved or the username is incorrect.
       </p>
       <Link href="/">
-        <button className="btn-chai px-7 py-2.5 text-sm">
-          Back to Home
-        </button>
+        <button className="btn-deco mt-2">Back to the Lobby</button>
       </Link>
     </div>
   )

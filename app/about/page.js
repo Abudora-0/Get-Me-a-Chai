@@ -6,32 +6,32 @@ export const metadata = {
 
 const benefits = [
   {
-    icon: "💰",
+    numeral: "I",
     title: "Direct Financial Support",
     desc: "Fans contribute directly to your work — no middlemen, no complicated tiers.",
   },
   {
-    icon: "🤝",
+    numeral: "II",
     title: "Community Collaboration",
     desc: "Connect with your audience, get feedback, and build projects together.",
   },
   {
-    icon: "🌐",
+    numeral: "III",
     title: "Global Reach",
     desc: "Share your page with anyone worldwide and grow your supporter base.",
   },
   {
-    icon: "⚡",
+    numeral: "IV",
     title: "Instant Setup",
     desc: "Sign in with GitHub, add your Razorpay credentials, and you're live in minutes.",
   },
   {
-    icon: "🔒",
+    numeral: "V",
     title: "Secure Payments",
     desc: "Powered by Razorpay — India's most trusted payment gateway.",
   },
   {
-    icon: "📊",
+    numeral: "VI",
     title: "Track Your Support",
     desc: "See your top supporters and total funds raised right on your creator page.",
   },
@@ -41,14 +41,14 @@ const About = () => {
   return (
     <>
       {/* Hero */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#f5a623]/8 rounded-full blur-3xl -z-10 pointer-events-none" />
+      <section className="border-b border-[#a8841c]/35 py-20">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <span className="text-5xl">☕</span>
-          <h1 className="font-chai text-5xl md:text-6xl text-[#f3e9dd] mt-5 mb-5">
-            About Get Me a <em className="text-[#f5a623]">Chai</em>
+          <div className="deco-label mb-4">— The House Story —</div>
+          <h1 className="font-deco text-5xl md:text-6xl text-[#123c33] mb-6">
+            About Get Me a <span className="text-[#a8841c]">Chai</span>
           </h1>
-          <p className="text-[#b39c88] text-lg leading-relaxed">
+          <div className="deco-divider max-w-xs mx-auto mb-6 text-xs">◆</div>
+          <p className="text-[#4a6b60] text-lg leading-relaxed">
             Get Me a Chai is a crowdfunding platform built for creators — writers, developers, designers, educators, and anyone who makes things people love. We make it easy for your fans to support your work by buying you a chai.
           </p>
         </div>
@@ -56,36 +56,40 @@ const About = () => {
 
       {/* How it works */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="font-chai text-4xl text-[#f3e9dd] text-center mb-3">How it works</h2>
-        <p className="text-[#7d6a5a] text-center mb-12">Simple, transparent, creator-first</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="text-center mb-12">
+          <div className="deco-label mb-3">The Ceremony</div>
+          <h2 className="font-deco text-4xl text-[#123c33]">How It Works</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
           {[
             { step: "1", title: "Sign In", desc: "Create your account instantly with GitHub. No long forms, no waiting." },
             { step: "2", title: "Set Up Your Page", desc: "Add a profile photo, cover image, and connect your Razorpay account to receive payments." },
             { step: "3", title: "Share & Earn", desc: "Share your unique page link. Fans visit and buy you a chai — money lands in your account." },
           ].map(s => (
-            <div key={s.step} className="chai-card chai-card-hover p-7 text-center">
-              <div className="w-12 h-12 rounded-full bg-[#f5a623] text-[#201512] font-chai text-2xl flex items-center justify-center mx-auto mb-4">
-                {s.step}
+            <div key={s.step} className="deco-card deco-card-hover p-8 text-center">
+              <div className="w-12 h-12 border border-[#c9a227] text-[#a8841c] font-deco text-2xl flex items-center justify-center mx-auto mb-5 rotate-45">
+                <span className="-rotate-45">{s.step}</span>
               </div>
-              <h3 className="font-chai text-2xl text-[#f3e9dd] mb-2">{s.title}</h3>
-              <p className="text-[#b39c88] text-sm leading-relaxed">{s.desc}</p>
+              <h3 className="font-deco text-2xl text-[#123c33] mb-2">{s.title}</h3>
+              <p className="text-[#4a6b60] text-sm leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Benefits */}
-      <section className="border-y border-[#f5a623]/10 bg-[#191009] py-16">
+      {/* Benefits — emerald band */}
+      <section className="bg-[#123c33] border-y border-[#c9a227]/40 py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="font-chai text-4xl text-[#f3e9dd] text-center mb-3">Why Get Me a Chai?</h2>
-          <p className="text-[#7d6a5a] text-center mb-12">Everything a creator needs</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="text-center mb-12">
+            <div className="deco-label !text-[#c9a227] mb-3">The Amenities</div>
+            <h2 className="font-deco text-4xl text-[#f7f3e8]">Why Get Me a Chai?</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map(b => (
-              <div key={b.title} className="chai-card p-6">
-                <div className="text-3xl mb-3">{b.icon}</div>
-                <h3 className="font-chai text-xl text-[#f3e9dd] mb-1">{b.title}</h3>
-                <p className="text-[#b39c88] text-sm leading-relaxed">{b.desc}</p>
+              <div key={b.title} className="border border-[#c9a227]/50 p-7" style={{ boxShadow: 'inset 0 0 0 4px #123c33, inset 0 0 0 5px rgba(201,162,39,0.4)' }}>
+                <div className="font-deco text-2xl text-[#c9a227] mb-3">{b.numeral}</div>
+                <h3 className="font-deco text-xl text-[#f7f3e8] mb-2">{b.title}</h3>
+                <p className="text-[#f7f3e8]/65 text-sm leading-relaxed">{b.desc}</p>
               </div>
             ))}
           </div>
@@ -94,12 +98,11 @@ const About = () => {
 
       {/* CTA */}
       <section className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h2 className="font-chai text-4xl text-[#f3e9dd] mb-4">Ready to start?</h2>
-        <p className="text-[#b39c88] mb-8 max-w-md mx-auto">Join creators already using Get Me a Chai to fund their passion.</p>
+        <div className="deco-label mb-3">Reservations Open</div>
+        <h2 className="font-deco text-4xl text-[#123c33] mb-4">Ready to Start?</h2>
+        <p className="text-[#4a6b60] mb-8 max-w-md mx-auto">Join creators already using Get Me a Chai to fund their passion.</p>
         <Link href="/login">
-          <button className="btn-chai px-9 py-3.5 text-base">
-            Create your page — it&apos;s free
-          </button>
+          <button className="btn-deco-gold">Create Your Page — It&apos;s Free</button>
         </Link>
       </section>
     </>

@@ -3,13 +3,13 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 
-const CupLogo = () => (
-  <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-    <path d="M8 14h13l-1.5 9a1 1 0 01-1 .9H10.5a1 1 0 01-1-.9L8 14z" fill="#f5a623"/>
-    <path d="M21 16h2a2 2 0 010 4h-2" stroke="#f5a623" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-    <path className="steam-line" d="M12 11 Q12.6 9.4 12 8" stroke="#c96f4a" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
-    <path className="steam-line" d="M15.5 11 Q16.1 9.4 15.5 8" stroke="#c96f4a" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
-    <path className="steam-line" d="M19 11 Q19.6 9.4 19 8" stroke="#c96f4a" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+const DecoCup = () => (
+  <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+    <rect x="1" y="1" width="30" height="30" fill="#123c33"/>
+    <rect x="2.5" y="2.5" width="27" height="27" stroke="#c9a227" strokeWidth="1"/>
+    <path d="M16 6v4M11 7.5l1.8 3.4M21 7.5l-1.8 3.4" stroke="#c9a227" strokeWidth="1.2" strokeLinecap="round"/>
+    <path d="M10 16h12l-1.4 8a1 1 0 01-1 .8h-7.2a1 1 0 01-1-.8L10 16z" fill="#c9a227"/>
+    <path d="M22 17.5h1.8a1.8 1.8 0 010 3.6H21.4" stroke="#c9a227" strokeWidth="1.2" fill="none"/>
   </svg>
 )
 
@@ -18,15 +18,16 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false)
 
   return (
-    <nav className="bg-[#201512]/90 backdrop-blur-md border-b border-[#f5a623]/10 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <nav className="bg-[#f7f3e8]/95 backdrop-blur-sm border-b border-[#a8841c]/35 sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-4 h-[70px] flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 hover:opacity-85 transition-opacity">
-          <CupLogo />
-          <span className="font-chai text-2xl text-[#f3e9dd] tracking-wide">
-            Get Me a <em className="text-[#f5a623] not-italic font-chai italic">Chai</em>
-          </span>
+        <Link href="/" className="flex items-center gap-3 hover:opacity-85 transition-opacity">
+          <DecoCup />
+          <div className="leading-none">
+            <span className="font-deco text-xl text-[#123c33] tracking-wide block">Get Me a Chai</span>
+            <span className="deco-label !text-[0.52rem]">Est. for creators</span>
+          </div>
         </Link>
 
         {/* Right side */}
@@ -36,10 +37,10 @@ const Navbar = () => {
               <button
                 onClick={() => setShowDropdown(v => !v)}
                 onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
-                className="btn-chai-ghost flex items-center gap-2 px-4 py-2 text-sm"
+                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#123c33] border border-[#a8841c]/35 hover:border-[#c9a227] transition-all"
               >
                 {session.user?.image && (
-                  <img src={session.user.image} alt="" className="w-6 h-6 rounded-full border border-[#f5a623]/30" />
+                  <img src={session.user.image} alt="" className="w-6 h-6 rounded-full border border-[#c9a227]" />
                 )}
                 {session.user?.name || 'Account'}
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
@@ -48,31 +49,31 @@ const Navbar = () => {
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 top-12 w-48 chai-card !rounded-xl py-1.5 z-50 shadow-2xl shadow-black/50">
+                <div className="absolute right-0 top-12 w-52 deco-card py-2 z-50">
                   <Link
                     href="/dashboard"
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#b39c88] hover:bg-[#35251c] hover:text-[#f5a623] transition-colors"
+                    className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#4a6b60] hover:text-[#a8841c] transition-colors"
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
                     </svg>
                     Dashboard
                   </Link>
                   <Link
                     href={`/${session.user?.name}`}
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#b39c88] hover:bg-[#35251c] hover:text-[#f5a623] transition-colors"
+                    className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#4a6b60] hover:text-[#a8841c] transition-colors"
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
                     </svg>
                     Your Page
                   </Link>
-                  <hr className="my-1 border-[#f5a623]/10" />
+                  <hr className="my-1.5 border-[#a8841c]/25 mx-4" />
                   <button
                     onClick={() => signOut()}
-                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-[#c96f4a] hover:bg-[#35251c] transition-colors"
+                    className="flex items-center gap-2.5 w-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#7a2e2e] hover:text-[#a03c3c] transition-colors"
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
                     </svg>
                     Sign Out
@@ -83,12 +84,12 @@ const Navbar = () => {
           )}
 
           {session ? (
-            <button onClick={() => signOut()} className="btn-chai px-4 py-2 text-sm">
+            <button onClick={() => signOut()} className="btn-deco !px-5 !py-2.5 !text-[0.68rem]">
               Logout
             </button>
           ) : (
             <Link href="/login">
-              <button className="btn-chai px-5 py-2 text-sm">
+              <button className="btn-deco !px-6 !py-2.5 !text-[0.68rem]">
                 Login
               </button>
             </Link>

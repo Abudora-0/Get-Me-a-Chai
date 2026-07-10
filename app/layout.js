@@ -1,16 +1,15 @@
-import { Instrument_Serif, DM_Sans } from "next/font/google";
+import { Marcellus, Jost } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import SessionWrapper from "@/components/SessionWrapper";
 import Footer from "@/components/Footer";
 
-const instrument = Instrument_Serif({
+const marcellus = Marcellus({
   weight: "400",
-  style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-display",
 });
-const dmSans = DM_Sans({
+const jost = Jost({
   subsets: ["latin"],
   variable: "--font-body",
 });
@@ -27,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${instrument.variable} ${dmSans.variable} min-h-screen flex flex-col`}
+        className={`${marcellus.variable} ${jost.variable} min-h-screen flex flex-col`}
         style={{ fontFamily: "var(--font-body), sans-serif" }}
         suppressHydrationWarning
       >
