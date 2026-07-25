@@ -172,6 +172,19 @@ body {
 .sunburst-slow { animation: sunburstSpin 90s linear infinite; transform-origin: center; }
 
 /* ivory toasts */
+/* html:root beats react-toastify's runtime-injected `:root{...}` stylesheet,
+   which is appended to <head> after this file loads and would otherwise win
+   on source order alone despite matching specificity. */
+html:root {
+  --toastify-color-success: #3d7a4f;
+  --toastify-icon-color-success: #3d7a4f;
+  --toastify-color-error: var(--burgundy);
+  --toastify-icon-color-error: var(--burgundy);
+  --toastify-color-warning: var(--gold-deep);
+  --toastify-icon-color-warning: var(--gold-deep);
+  --toastify-color-info: var(--emerald-soft);
+  --toastify-icon-color-info: var(--emerald-soft);
+}
 .Toastify__toast {
   background: var(--card) !important;
   border: 1px solid var(--gold-line);

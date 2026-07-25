@@ -3,19 +3,21 @@
 import { useEffect, useState } from 'react'
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
-import { fetchuser, fetchpayments, updateProfile } from '@/actions/useractions'
+import { fetchuser, fetchpayments, fetchpendingpayments, confirmPayment, updateProfile } from '@/actions/useractions'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import AvatarUpload from '@/components/AvatarUpload'
+import CoverUpload from '@/components/CoverUpload'
+import { BankIcon } from '@/components/PaymentIcons'
 
 const fields = [
-  { name: 'name',           label: 'Display Name',        type: 'text',     placeholder: 'Your full name' },
-  { name: 'email',          label: 'Email',               type: 'email',    placeholder: 'your@email.com' },
-  { name: 'username',       label: 'Username',            type: 'text',     placeholder: 'your-username' },
-  { name: 'profilepic',     label: 'Profile Picture URL', type: 'url',      placeholder: 'https://example.com/photo.jpg' },
-  { name: 'coverpic',       label: 'Cover Picture URL',   type: 'url',      placeholder: 'https://example.com/cover.jpg' },
-  { name: 'jazzcashMerchantId', label: 'JazzCash Merchant ID',    type: 'text',     placeholder: 'MC12345' },
-  { name: 'jazzcashPassword',   label: 'JazzCash Password',       type: 'password', placeholder: '••••••••••••••••' },
-  { name: 'jazzcashSalt',       label: 'JazzCash Integrity Salt', type: 'password', placeholder: '••••••••••••••••' },
+  { name: 'name',           label: 'Display Name',        type: 'text', placeholder: 'Your full name' },
+  { name: 'email',          label: 'Email',               type: 'email', placeholder: 'your@email.com' },
+  { name: 'username',       label: 'Username',            type: 'text', placeholder: 'your-username' },
+  { name: 'paymentPhone',            label: 'JazzCash / Easypaisa Number', type: 'tel',  placeholder: '03XX-XXXXXXX' },
+  { name: 'paymentAccountTitle',     label: 'Account Title',               type: 'text', placeholder: 'Name on the account' },
+  { name: 'paymentBankName',         label: 'Bank Name',                   type: 'text', placeholder: 'e.g. Meezan Bank' },
+  { name: 'paymentBankAccountNumber', label: 'Bank Account Number / IBAN', type: 'text', placeholder: 'PK00XXXX0000000000000000' },
 ]
 
 const Dashboard = () => {
@@ -24,18 +26,38 @@ const Dashboard = () => {
   const [tab, setTab] = useState('overview')
   const [form, setForm] = useState({})
   const [payments, setPayments] = useState([])
+  const [pendingPayments, setPendingPayments] = useState([])
   const [saving, setSaving] = useState(false)
+  const [confirmingId, setConfirmingId] = useState(null)
+
+  const loadPayments = (username) => {
+    fetchpayments(username).then(p => setPayments(p || []))
+    fetchpendingpayments(username).then(p => setPendingPayments(p || []))
+  }
 
   useEffect(() => {
     if (!session) {
       router.push('/login')
     } else {
       fetchuser(session.user.name).then(u => setForm(u || {}))
-      fetchpayments(session.user.name).then(p => setPayments(p || []))
+      loadPayments(session.user.name)
     }
   }, [session])
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
+
+  const handleConfirm = async (paymentId) => {
+    setConfirmingId(paymentId)
+    try {
+      await confirmPayment(paymentId)
+      loadPayments(session.user.name)
+      toast.success('Payment confirmed!', { position: 'top-right' })
+    } catch {
+      toast.error('Could not confirm payment.', { position: 'top-right' })
+    } finally {
+      setConfirmingId(null)
+    }
+  }
 
   const handleSubmit = async (formData) => {
     setSaving(true)
@@ -61,7 +83,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
           <div>
-            <div className="deco-label mb-2">— The Proprietor&apos;s Office —</div>
+            <div className="deco-label mb-2">◆ The Proprietor&apos;s Office ◆</div>
             <h1 className="font-deco text-4xl md:text-5xl text-[#123c33]">Dashboard</h1>
             <p className="text-[#4a6b60] mt-2">Welcome back, <span className="text-[#a8841c] font-semibold">{form.name || form.username || '...'}</span></p>
           </div>
@@ -69,7 +91,7 @@ const Dashboard = () => {
             href={`/${form.username || ''}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-deco flex items-center gap-2 !px-5 !py-2.5 !text-[0.68rem]"
+            className="btn-deco !flex items-center justify-center gap-2 shrink-0 whitespace-nowrap !px-7 !py-2.5 !text-[0.68rem] w-fit"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -114,9 +136,9 @@ const Dashboard = () => {
               </div>
               <div className="deco-card p-6 text-center">
                 <p className="deco-label mb-2">Your Page</p>
-                <p className="font-deco text-2xl text-[#123c33] mt-1 truncate">/{form.username || '—'}</p>
-                <p className="text-xs mt-1.5" style={{ color: form.jazzcashMerchantId ? '#3d7a4f' : '#7a2e2e' }}>
-                  {form.jazzcashMerchantId ? '✓ Payments active' : '⚠ Set JazzCash details'}
+                <p className="font-deco text-2xl text-[#123c33] mt-1 truncate">/{form.username || '-'}</p>
+                <p className="text-xs mt-1.5" style={{ color: (form.paymentPhone || (form.paymentBankName && form.paymentBankAccountNumber)) ? '#3d7a4f' : '#7a2e2e' }}>
+                  {(form.paymentPhone || (form.paymentBankName && form.paymentBankAccountNumber)) ? '✓ Payments active' : '⚠ Set payment details'}
                 </p>
               </div>
             </div>
@@ -127,7 +149,7 @@ const Dashboard = () => {
               {payments.length === 0 ? (
                 <div className="text-center py-8">
                   <span className="text-4xl opacity-50">☕</span>
-                  <p className="text-[#8fa199] mt-3 text-sm">No supporters yet — share your page!</p>
+                  <p className="text-[#8fa199] mt-3 text-sm">No supporters yet, share your page!</p>
                   <a
                     href={`/${form.username || ''}`}
                     target="_blank"
@@ -165,9 +187,9 @@ const Dashboard = () => {
                   { label: 'Display Name', done: !!form.name },
                   { label: 'Profile Picture', done: !!form.profilepic },
                   { label: 'Cover Picture', done: !!form.coverpic },
-                  { label: 'JazzCash Merchant ID', done: !!form.jazzcashMerchantId },
-                  { label: 'JazzCash Password', done: !!form.jazzcashPassword },
-                  { label: 'JazzCash Integrity Salt', done: !!form.jazzcashSalt },
+                  { label: 'JazzCash / Easypaisa Number', done: !!form.paymentPhone },
+                  { label: 'Account Title', done: !!form.paymentAccountTitle },
+                  { label: 'Bank Transfer Details', done: !!(form.paymentBankName && form.paymentBankAccountNumber) },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-3 text-sm">
                     <span className={`w-5 h-5 flex items-center justify-center text-xs border ${item.done ? 'border-[#3d7a4f] text-[#3d7a4f]' : 'border-[#a8841c]/30 text-[#8fa199]'}`}>
@@ -189,6 +211,36 @@ const Dashboard = () => {
 
         {/* SUPPORTERS TAB */}
         {tab === 'supporters' && (
+          <div className="space-y-7">
+          {pendingPayments.length > 0 && (
+            <div className="deco-card p-7 !border-[#a8841c]">
+              <h2 className="font-deco text-2xl text-[#123c33] mb-1.5">Pending Confirmation</h2>
+              <p className="text-sm text-[#8fa199] mb-6">These supporters say they've sent a transfer. Confirm once it lands in your account.</p>
+              <div className="space-y-3">
+                {pendingPayments.map(p => (
+                  <div key={p.id} className="flex items-center justify-between gap-4 p-5 border border-[#a8841c]/40 bg-[#f7f3e8]/60">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-10 h-10 rotate-45 bg-[#123c33] border border-[#c9a227] flex items-center justify-center shrink-0">
+                        <span className="-rotate-45 font-deco text-[#c9a227]">{p.name?.[0]?.toUpperCase() || '?'}</span>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-medium text-[#123c33]">{p.name} <span className="font-deco text-[#a8841c]">Rs.{p.amount}</span></p>
+                        {p.message && <p className="text-sm text-[#4a6b60] mt-0.5 italic truncate">&quot;{p.message}&quot;</p>}
+                        <p className="text-xs text-[#8fa199] mt-0.5">{new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleConfirm(p.id)}
+                      disabled={confirmingId === p.id}
+                      className="btn-deco-gold !px-4 !py-2 !text-[0.6rem] shrink-0 whitespace-nowrap"
+                    >
+                      {confirmingId === p.id ? 'Confirming…' : 'Mark as Received'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="deco-card p-7">
             <h2 className="font-deco text-2xl text-[#123c33] mb-6">All Supporters</h2>
             {payments.length === 0 ? (
@@ -220,6 +272,7 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+          </div>
         )}
 
         {/* SETTINGS TAB */}
@@ -234,9 +287,12 @@ const Dashboard = () => {
                   </div>
                 )}
                 <div className="px-6 pb-5 pt-3 flex items-center gap-4">
-                  {form.profilepic && (
-                    <img src={form.profilepic} alt="Profile" className="w-12 h-12 rounded-full border-2 border-[#c9a227] shadow -mt-6 object-cover" />
-                  )}
+                  <img
+                    src={form.profilepic || '/avatar.gif'}
+                    onError={(e) => { e.currentTarget.src = '/avatar.gif' }}
+                    alt="Profile"
+                    className={`w-12 h-12 rounded-full border-2 border-[#c9a227] shadow object-cover ${form.coverpic ? '-mt-6' : ''}`}
+                  />
                   <div>
                     <p className="font-deco text-lg text-[#123c33]">{form.name || form.username || 'Your Name'}</p>
                     <p className="text-xs text-[#8fa199]">@{form.username || 'username'}</p>
@@ -248,9 +304,20 @@ const Dashboard = () => {
             <div className="deco-card p-8">
               <h2 className="font-deco text-2xl text-[#123c33] mb-7">Profile Settings</h2>
               <form action={handleSubmit} className="flex flex-col gap-6">
+                <input type="hidden" name="profilepic" value={form.profilepic || ''} />
+                <input type="hidden" name="coverpic" value={form.coverpic || ''} />
+                <AvatarUpload
+                  value={form.profilepic}
+                  onChange={(dataUrl) => setForm(f => ({ ...f, profilepic: dataUrl }))}
+                />
+                <CoverUpload
+                  value={form.coverpic}
+                  onChange={(dataUrl) => setForm(f => ({ ...f, coverpic: dataUrl }))}
+                />
                 {fields.map(f => (
                   <div key={f.name}>
-                    <label htmlFor={f.name} className="deco-label block mb-1">
+                    <label htmlFor={f.name} className="deco-label mb-1 flex items-center gap-2">
+                      {f.name === 'paymentBankName' && <BankIcon className="!w-4 !h-4 text-[#a8841c]" />}
                       {f.label}
                     </label>
                     <input
@@ -263,8 +330,8 @@ const Dashboard = () => {
                       className="deco-input"
                       autoComplete="off"
                     />
-                    {f.name.startsWith('jazzcash') && (
-                      <p className="text-xs text-[#8fa199] mt-1.5">Required to accept payments on your page</p>
+                    {f.name === 'paymentPhone' && (
+                      <p className="text-xs text-[#8fa199] mt-1.5">At least one payment method is required to accept support on your page</p>
                     )}
                   </div>
                 ))}

@@ -21,7 +21,7 @@ const features = [
 const steps = [
   { step: "01", title: "Create Your Page", desc: "Sign in with GitHub and set up your creator profile in minutes." },
   { step: "02", title: "Share Your Link", desc: "Share your unique page URL with your audience and community." },
-  { step: "03", title: "Receive Support", desc: "Your fans buy you a chai — funds go directly to you via JazzCash." },
+  { step: "03", title: "Receive Support", desc: "Your fans buy you a chai, and funds go directly to you via JazzCash." },
 ]
 
 const Sunburst = () => (
@@ -55,14 +55,14 @@ export default function Home() {
       <section className="relative overflow-hidden border-b border-[#a8841c]/35">
         <div className="max-w-4xl mx-auto px-4 pt-16 pb-20 flex flex-col items-center text-center gap-7 fade-in-up">
           <Sunburst />
-          <div className="deco-label">— Patronage for the modern creator —</div>
+          <div className="deco-label">◆ Patronage for the modern creator ◆</div>
           <h1 className="font-deco text-5xl md:text-7xl text-[#123c33] leading-[1.08] max-w-3xl">
             Let Your Fans<br />
             Buy You a <span className="text-[#a8841c]">Chai</span>
           </h1>
           <p className="text-[#4a6b60] text-lg max-w-xl leading-relaxed">
             A grand little corner of the internet where your audience funds your
-            creative work — served one golden cup at a time.
+            creative work, served one golden cup at a time.
           </p>
           <div className="flex gap-4 flex-wrap justify-center mt-2">
             <Link href="/login">
@@ -93,7 +93,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works — emerald band */}
+      {/* How it works: emerald band */}
       <section className="bg-[#123c33] border-y border-[#c9a227]/40 py-20">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -135,7 +135,7 @@ export default function Home() {
           <h2 className="font-deco text-4xl md:text-5xl text-[#123c33]">Ready to Be Supported?</h2>
           <p className="text-[#4a6b60] max-w-md">Join thousands of creators already using Get Me a Chai to fund their passion projects.</p>
           <Link href="/login" className="mt-2">
-            <button className="btn-deco-gold">Create Your Page — It&apos;s Free</button>
+            <button className="btn-deco-gold">Create Your Page, It&apos;s Free</button>
           </Link>
           <div className="deco-divider w-full max-w-xs text-xs">◆ ◆ ◆</div>
         </div>

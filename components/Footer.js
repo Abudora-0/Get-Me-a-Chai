@@ -11,7 +11,7 @@ const Footer = () => {
             Get Me a <span className="text-[#c9a227]">Chai</span>
           </Link>
           <p className="text-[#f7f3e8]/50 text-xs uppercase tracking-[0.22em]">
-            &copy; {currentYear} — patronage, poured properly
+            &copy; {currentYear} · patronage, poured properly
           </p>
           <div className="flex items-center gap-6 text-xs uppercase tracking-[0.18em] text-[#f7f3e8]/70">
             <Link href="/about" className="hover:text-[#c9a227] transition-colors">About</Link>

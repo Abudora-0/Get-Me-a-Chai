@@ -18,7 +18,7 @@ const Login = () => {
 
         {/* Header */}
         <div className="text-center mb-9">
-          <div className="deco-label mb-3">— Members&apos; Entrance —</div>
+          <div className="deco-label mb-3">◆ Members&apos; Entrance ◆</div>
           <h1 className="font-deco text-4xl md:text-5xl text-[#123c33] mb-3">
             Welcome Back
           </h1>

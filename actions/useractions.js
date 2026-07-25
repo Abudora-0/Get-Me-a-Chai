@@ -1,52 +1,27 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { JAZZCASH_ENDPOINT, computeSecureHash, pktTimestamp } from "@/lib/jazzcash"
+import { auth } from "@/auth"
 
-// Builds a JazzCash hosted-checkout request for the creator being supported.
-// Returns the endpoint plus the signed form fields; the client submits them
-// as a plain form POST, which redirects the supporter to JazzCash.
-export const initiate = async (amount, to_username, paymentform) => {
+// Records a supporter's pledge against the creator's account. The creator pays
+// out-of-band (JazzCash/Easypaisa transfer or bank deposit using the details
+// on their page) and confirms receipt from the dashboard, which flips
+// `confirmed` to true.
+export const submitSupport = async (amount, to_username, paymentform) => {
     const user = await prisma.user.findUnique({ where: { username: to_username } })
     if (!user) throw new Error("User not found")
-    if (!user.jazzcashMerchantId || !user.jazzcashPassword || !user.jazzcashSalt) {
-        throw new Error("Creator has not configured JazzCash")
+    if (!user.paymentPhone && !(user.paymentBankName && user.paymentBankAccountNumber)) {
+        throw new Error("Creator has not set up a payment method")
     }
-
-    const txnRefNo = `T${Date.now()}`
-
-    const fields = {
-        pp_Version: "1.1",
-        pp_TxnType: "",            // empty = JazzCash page offers wallet + card options
-        pp_Language: "EN",
-        pp_MerchantID: user.jazzcashMerchantId,
-        pp_SubMerchantID: "",
-        pp_Password: user.jazzcashPassword,
-        pp_BankID: "",
-        pp_ProductID: "",
-        pp_TxnRefNo: txnRefNo,
-        pp_Amount: String(Number.parseInt(amount)),   // amount in paisa
-        pp_TxnCurrency: "PKR",
-        pp_TxnDateTime: pktTimestamp(),
-        pp_BillReference: to_username.slice(0, 20),
-        pp_Description: `Chai for ${to_username}`.slice(0, 100),
-        pp_TxnExpiryDateTime: pktTimestamp(60),        // valid for 1 hour
-        pp_ReturnURL: `${process.env.NEXT_PUBLIC_URL}/api/jazzcash`,
-        ppmpf_1: to_username,
-    }
-    fields.pp_SecureHash = computeSecureHash(fields, user.jazzcashSalt)
 
     await prisma.payment.create({
         data: {
-            oid: txnRefNo,
-            amount: amount / 100,
+            amount,
             to_user: to_username,
             name: paymentform.name,
             message: paymentform.message || "",
         }
     })
-
-    return { endpoint: JAZZCASH_ENDPOINT, fields }
 }
 
 export const fetchuser = async (username) => {
@@ -56,11 +31,34 @@ export const fetchuser = async (username) => {
 
 export const fetchpayments = async (username) => {
     const payments = await prisma.payment.findMany({
-        where: { to_user: username, done: true },
+        where: { to_user: username, confirmed: true },
         orderBy: { amount: "desc" },
         take: 10,
     })
     return payments
+}
+
+export const fetchpendingpayments = async (username) => {
+    const payments = await prisma.payment.findMany({
+        where: { to_user: username, confirmed: false },
+        orderBy: { createdAt: "desc" },
+    })
+    return payments
+}
+
+// Lets a signed-in creator mark one of their own pending payments as received.
+export const confirmPayment = async (paymentId) => {
+    const session = await auth()
+    const username = session?.user?.name
+    if (!username) throw new Error("Not signed in")
+
+    const payment = await prisma.payment.findUnique({ where: { id: paymentId } })
+    if (!payment || payment.to_user !== username) throw new Error("Payment not found")
+
+    await prisma.payment.update({
+        where: { id: paymentId },
+        data: { confirmed: true },
+    })
 }
 
 export const updateProfile = async (data, olderusername) => {

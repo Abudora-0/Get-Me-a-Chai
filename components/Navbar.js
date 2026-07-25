@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 
 const DecoCup = () => (
@@ -16,6 +16,18 @@ const DecoCup = () => (
 const Navbar = () => {
   const { data: session } = useSession()
   const [showDropdown, setShowDropdown] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    if (!showDropdown) return
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showDropdown])
 
   return (
     <nav className="bg-[#f7f3e8]/95 backdrop-blur-sm border-b border-[#a8841c]/35 sticky top-0 z-50">
@@ -33,15 +45,17 @@ const Navbar = () => {
         {/* Right side */}
         <div className="flex items-center gap-3">
           {session && (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowDropdown(v => !v)}
-                onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
                 className="flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#123c33] border border-[#a8841c]/35 hover:border-[#c9a227] transition-all"
               >
-                {session.user?.image && (
-                  <img src={session.user.image} alt="" className="w-6 h-6 rounded-full border border-[#c9a227]" />
-                )}
+                <img
+                  src={session.user?.image || '/avatar.gif'}
+                  onError={(e) => { e.currentTarget.src = '/avatar.gif' }}
+                  alt=""
+                  className="w-6 h-6 rounded-full border border-[#c9a227] object-cover"
+                />
                 {session.user?.name || 'Account'}
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
@@ -52,6 +66,7 @@ const Navbar = () => {
                 <div className="absolute right-0 top-12 w-52 deco-card py-2 z-50">
                   <Link
                     href="/dashboard"
+                    onClick={() => setShowDropdown(false)}
                     className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#4a6b60] hover:text-[#a8841c] transition-colors"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,6 +76,7 @@ const Navbar = () => {
                   </Link>
                   <Link
                     href={`/${session.user?.name}`}
+                    onClick={() => setShowDropdown(false)}
                     className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#4a6b60] hover:text-[#a8841c] transition-colors"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

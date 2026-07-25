@@ -15,7 +15,7 @@ const jost = Jost({
 });
 
 export const metadata = {
-  title: "Get Me a Chai — Support Your Favourite Creators",
+  title: "Get Me a Chai · Support Your Favourite Creators",
   description: "A crowdfunding platform where fans can support their favourite creators by buying them a chai.",
   icons: {
     icon: "/favicon.svg",

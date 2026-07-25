@@ -1,25 +1,33 @@
-# Get Me A Chai — Patreon Clone
+# Get Me A Chai · Patreon Clone
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
+[![NextAuth](https://img.shields.io/badge/NextAuth-v5-purple)](https://authjs.dev)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)](https://www.prisma.io)
+[![PostgreSQL](https://img.shields.io/badge/Postgres-Neon-4169E1?logo=postgresql&logoColor=white)](https://neon.tech)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://patreon-c.netlify.app)
 
 **Live Demo:** https://patreon-c.netlify.app
 
-A full-stack creator support platform inspired by Patreon and Buy Me a Coffee. Fans can support their favorite creators by sending payments directly via Razorpay.
+A full-stack creator support platform inspired by Patreon and Buy Me a Coffee. Fans support their favorite creators with a direct JazzCash, Easypaisa, or bank transfer.
 
 ---
 
 ## About
 
-Get Me A Chai lets creators sign up with GitHub, set up a public profile page, and start receiving support from their fans. Supporters visit the creator's page and make a payment (buying them a "chai") with a custom message. Built with Next.js, NextAuth for GitHub OAuth, Prisma for database access, and Razorpay for payment processing.
+Get Me A Chai lets creators sign in with GitHub or Google, set up a public profile page, and start receiving support from their fans. Creators list their JazzCash/Easypaisa number and bank details; supporters visit the creator's page, send the transfer themselves, and log their support with a custom message, which the creator confirms from their dashboard once the money lands. Built with Next.js, NextAuth for OAuth, and Prisma for database access.
 
 ---
 
 ## Features
 
-- **GitHub OAuth login** — sign in instantly with your GitHub account via NextAuth
-- **Creator profile** — set your name, username, profile picture, cover photo, and Razorpay credentials
-- **Public support page** — shareable page where fans can send payments with a message
-- **Razorpay integration** — real payment processing via Razorpay API
-- **Dashboard** — manage your profile and view incoming payments
-- **Persistent storage** — all users and payments saved to PostgreSQL via Prisma
+- **GitHub & Google OAuth login** - sign in instantly via NextAuth
+- **Creator profile** - set your name, username, profile picture (upload & crop), cover photo, and payment details
+- **Public support page** - shareable page where fans see how to pay and log their support with a message
+- **Manual payment confirmation** - no payment gateway, no merchant account; creators confirm transfers themselves from the dashboard
+- **Dashboard** - manage your profile, confirm pending payments, and view your supporter history
+- **Persistent storage** - all users and payments saved to PostgreSQL via Prisma
 
 ---
 
@@ -28,10 +36,9 @@ Get Me A Chai lets creators sign up with GitHub, set up a public profile page, a
 | Technology | Purpose |
 |---|---|
 | Next.js 16 | Full-stack React framework |
-| NextAuth v5 | GitHub OAuth authentication |
+| NextAuth v5 | GitHub & Google OAuth authentication |
 | Prisma | ORM for database access |
 | PostgreSQL (Neon) | Cloud database |
-| Razorpay | Payment processing |
 | Tailwind CSS | Styling |
 
 ---
@@ -62,5 +69,13 @@ NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your_secret
 GITHUB_ID=your_github_oauth_app_id
 GITHUB_SECRET=your_github_oauth_app_secret
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 NEXT_PUBLIC_URL=http://localhost:3000
 ```
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE).
