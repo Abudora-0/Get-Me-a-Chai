@@ -6,7 +6,7 @@
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)](https://www.prisma.io)
 [![PostgreSQL](https://img.shields.io/badge/Postgres-Neon-4169E1?logo=postgresql&logoColor=white)](https://neon.tech)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://patreon-c.netlify.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://get-me-a-chaii.netlify.app)
 
 **Live Demo:** https://get-me-a-chaii.netlify.app/
 
@@ -63,6 +63,8 @@ npm run dev
 
 ## Environment Variables
 
+See [`.env.example`](.env.example) for the full list and per-provider notes.
+
 ```env
 DATABASE_URL=your_postgresql_connection_string
 NEXTAUTH_URL=http://localhost:3000
@@ -73,6 +75,20 @@ GOOGLE_CLIENT_ID=your_google_oauth_client_id
 GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 NEXT_PUBLIC_URL=http://localhost:3000
 ```
+
+### OAuth setup
+
+`NEXTAUTH_URL` must match the exact origin the app is served from (no trailing
+slash, no path). The OAuth providers must be told the same callback URLs:
+
+| Provider | Where | Value |
+|---|---|---|
+| GitHub | github.com/settings/developers, the app's **Authorization callback URL** | `<NEXTAUTH_URL>/api/auth/callback/github` |
+| Google | Cloud Console, Credentials, the OAuth client's **Authorized redirect URIs** | `<NEXTAUTH_URL>/api/auth/callback/google` |
+| Google | same screen, **Authorized JavaScript origins** | `<NEXTAUTH_URL>` |
+
+If the deploy URL changes, update `NEXTAUTH_URL` and both provider settings, or
+sign-in fails with `redirect_uri` mismatch errors.
 
 ---
 
