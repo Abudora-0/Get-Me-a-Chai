@@ -10,12 +10,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     trustHost: true,
     // Set AUTH_DEBUG=true in the host env to get verbose logs while debugging.
     debug: process.env.AUTH_DEBUG === "true",
-    // Always surface the underlying error in the function logs. NextAuth hides
-    // it from the browser (?error=Configuration), so this is the only place to
-    // see what actually failed (bad client secret, PKCE cookie, Prisma, etc).
+    // NextAuth only shows ?error=Configuration in the browser and wraps the real
+    // failure several layers deep (error.cause.err, and often .cause again).
+    // Walk the whole chain so the function logs show what actually broke.
     logger: {
-        error(...args) {
-            console.error("[auth][error]", ...args.map(a => (a instanceof Error ? `${a.name}: ${a.message}\n${a.stack}` : a)))
+        error(error) {
+            const parts = []
+            let e = error
+            let depth = 0
+            while (e && depth < 6) {
+                const name = e.type || e.name || "Error"
+                parts.push(`${name}: ${e.message || String(e)}`)
+                if (e.stack) parts.push(String(e.stack).split("\n").slice(1, 5).join("\n"))
+                const next = e.cause?.err || e.cause
+                if (e.cause && !e.cause.err && !(e.cause instanceof Error)) {
+                    parts.push(`details: ${JSON.stringify(e.cause)}`)
+                }
+                e = next instanceof Error ? next : null
+                depth++
+            }
+            console.error("[auth][error]\n" + parts.join("\n"))
         },
         warn(code) {
             console.warn("[auth][warn]", code)
