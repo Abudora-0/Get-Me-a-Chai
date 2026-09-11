@@ -31,39 +31,50 @@ const Navbar = () => {
 
   return (
     <nav className="bg-[#f7f3e8]/95 backdrop-blur-sm border-b border-[#a8841c]/35 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-[70px] flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 h-16 sm:h-[70px] flex items-center justify-between gap-2">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 hover:opacity-85 transition-opacity">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-85 transition-opacity min-w-0 shrink-0">
           <DecoCup />
-          <div className="leading-none">
-            <span className="font-deco text-xl text-[#123c33] tracking-wide block">Get Me a Chai</span>
-            <span className="deco-label !text-[0.52rem]">Est. for creators</span>
+          <div className="leading-none whitespace-nowrap">
+            <span className="font-deco text-base sm:text-xl text-[#123c33] tracking-wide block">Get Me a Chai</span>
+            <span className="deco-label !text-[0.52rem] hidden sm:block">Est. for creators</span>
           </div>
         </Link>
 
         {/* Right side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {session && (
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowDropdown(v => !v)}
-                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#123c33] border border-[#a8841c]/35 hover:border-[#c9a227] transition-all"
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-[#123c33] border border-[#a8841c]/35 hover:border-[#c9a227] transition-all"
               >
                 <img
                   src={session.user?.image || '/avatar.gif'}
                   onError={(e) => { e.currentTarget.src = '/avatar.gif' }}
                   alt=""
-                  className="w-6 h-6 rounded-full border border-[#c9a227] object-cover"
+                  className="w-6 h-6 rounded-full border border-[#c9a227] object-cover shrink-0"
                 />
-                {session.user?.name || 'Account'}
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+                <span className="hidden sm:inline max-w-[120px] truncate">{session.user?.name || 'Account'}</span>
+                <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                 </svg>
               </button>
 
               {showDropdown && (
                 <div className="absolute right-0 top-12 w-52 deco-card py-2 z-50">
+                  <div className="flex items-center gap-2.5 px-5 py-2 mb-1 border-b border-[#a8841c]/25 sm:hidden">
+                    <img
+                      src={session.user?.image || '/avatar.gif'}
+                      onError={(e) => { e.currentTarget.src = '/avatar.gif' }}
+                      alt=""
+                      className="w-7 h-7 rounded-full border border-[#c9a227] object-cover shrink-0"
+                    />
+                    <span className="text-xs font-semibold uppercase tracking-[0.1em] text-[#123c33] truncate">
+                      {session.user?.name || 'Account'}
+                    </span>
+                  </div>
                   <Link
                     href="/dashboard"
                     onClick={() => setShowDropdown(false)}
@@ -100,12 +111,14 @@ const Navbar = () => {
           )}
 
           {session ? (
-            <button onClick={() => signOut()} className="btn-deco !px-5 !py-2.5 !text-[0.68rem]">
+            // Sign Out already lives in the dropdown above; this shortcut only
+            // has room on wider screens.
+            <button onClick={() => signOut()} className="btn-deco !px-5 !py-2.5 !text-[0.68rem] hidden sm:inline-flex">
               Logout
             </button>
           ) : (
             <Link href="/login">
-              <button className="btn-deco !px-6 !py-2.5 !text-[0.68rem]">
+              <button className="btn-deco !px-4 sm:!px-6 !py-2 sm:!py-2.5 !text-[0.62rem] sm:!text-[0.68rem]">
                 Login
               </button>
             </Link>
